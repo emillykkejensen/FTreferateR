@@ -9,7 +9,11 @@ parse_Aktivitet <- function(Aktivitet){
   AktivitetList <- append(AktivitetList, Aktivitet$Taler$MetaSpeakerMP)
   AktivitetList <- append(AktivitetList, list(TalerTitel = paste(unlist(Aktivitet$Taler$TalerTitel), collapse = " ")))
   AktivitetList <- append(AktivitetList, list(TaleType = unlist(Aktivitet$TaleType, use.names = FALSE)))
-  AktivitetList <- append(AktivitetList, list(Tale = list(tale = unlist(Aktivitet$TaleSegment$TekstGruppe$Exitus, use.names = FALSE))))
+
+  tale <- lapply(Aktivitet$TaleSegment$TekstGruppe, function(tekst) unlist(tekst, use.names = FALSE))
+  names(tale) <- NULL
+
+  AktivitetList <- append(AktivitetList, list(Tale = list(tale = tale)))
 
   AktivitetList[sapply(AktivitetList, is.null)] <- NA_character_
 
